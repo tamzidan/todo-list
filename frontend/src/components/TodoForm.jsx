@@ -1,7 +1,16 @@
-function TodoForm() {
+function TodoForm({ todos, setTodos }) {
   const handleSubmit = (event) => {
     event.preventDefault();
-    // reset the TodoForm
+    const value = event.target.todo.value;
+    const newTodo = {
+      title: value,
+      id: self.crypto.randomUUID(),
+      is_completed: false,
+    };
+
+    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    const updatedTodoList = JSON.stringify([...todos, newTodo]);
+    localStorage.setItem("todos", updatedTodoList);
     event.target.reset();
   };
   return (
@@ -15,10 +24,13 @@ function TodoForm() {
         />
       </label>
       <button>
-        <span className="visually-hidden">Submit</span>
-        <svg>
-          <path d="" />
-        </svg>
+        <span className="visually-hidden"></span>
+        <img
+          width="24"
+          height="24"
+          src="https://img.icons8.com/android/24/FFFFFF/plus.png"
+          alt="plus"
+        />
       </button>
     </form>
   );

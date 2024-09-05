@@ -1,25 +1,20 @@
-// src/app/page.js
-
 "use client";
 import React from "react";
-import TodoForm from "./components/TodoForm";
-import TodoHeader from "./components/TodoHeader";
-import TodoHero from "./components/TodoHero";
-import TodoList from "./components/TodoList";
-// import TodoItem from "./components/TodoItem";
-
+import TodoForm from "../src/components/TodoForm";
+import TodoHeader from "../src/components/TodoHeader";
+import TodoHero from "../src/components/TodoHero";
+import TodoList from "../src/components/TodoList";
 import "./App.css";
 
 function App() {
-  const [todos, setTodos] = React.useState([
-    { title: "Some task", id: self.crypto.randomUUID(), is_completed: false },
-    {
-      title: "Some other task",
-      id: self.crypto.randomUUID(),
-      is_completed: true,
-    },
-    { title: "last task", id: self.crypto.randomUUID(), is_completed: false },
-  ]);
+  const [todos, setTodos] = React.useState([]);
+
+  React.useEffect(() => {
+    const storedTodos = localStorage.getItem("todos");
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
+    }
+  }, []);
 
   const todos_completed = todos.filter(
     (todo) => todo.is_completed === true
@@ -30,8 +25,8 @@ function App() {
     <div className="wrapper">
       <TodoHeader />
       <TodoHero todos_completed={todos_completed} total_todos={total_todos} />
-      <TodoForm />
-      <TodoList todos={todos} />
+      <TodoForm todos={todos} setTodos={setTodos} />
+      <TodoList todos={todos} setTodos={setTodos} />
     </div>
   );
 }

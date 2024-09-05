@@ -1,49 +1,28 @@
-// src/components/TodoList.jsx
+import React from "react";
+import Item from "./TodoItem";
 
-function TodoList({ todos }) {
-  // src/components/TodoList.jsx
-
-  function Item({ item }) {
-    return (
-      <li id={item?.id} className="todo_item">
-        <button className="todo_items_left">
-          <svg>
-            <circle cx="11.998" cy="11.998" fillRule="nonzero" r="9.998" />
-          </svg>
-          <p>{item?.title}</p>
-        </button>
-        <div className="todo_items_right">
-          <button>
-            <span className="visually-hidden">Edit</span>
-            <svg>
-              <path d="" />
-            </svg>
-          </button>
-          <button>
-            <span className="visually-hidden">Delete</span>
-            <svg>
-              <path d="" />
-            </svg>
-          </button>
-        </div>
-      </li>
-    );
-  }
-
-  // src/components/TodoList.jsx
-
-  function TODOList({ todos }) {
-    return (
-      <ol className="todo_list">
+function TodoList({ todos, setTodos }) {
+  return (
+    <table className="todo_table">
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Edit / Hapus</th>
+        </tr>
+      </thead>
+      <tbody>
         {todos && todos.length > 0 ? (
-          todos?.map((item, index) => (
+          todos.map((item, index) => (
             <Item key={index} item={item} setTodos={setTodos} />
           ))
         ) : (
-          <p>Seems lonely in here, what are you up to?</p>
+          <tr>
+            <td colSpan="2">Seems lonely in here, what are you up to?</td>
+          </tr>
         )}
-      </ol>
-    );
-  }
+      </tbody>
+    </table>
+  );
 }
+
 export default TodoList;
