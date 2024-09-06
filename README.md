@@ -12,7 +12,6 @@ Aplikasi to-do list menggunakan React. Antara front-end dan backend terpisah, de
 - docker
 - pnpm
 - node.js
-  TBD
 
 ## How to run
 
@@ -22,4 +21,3 @@ Aplikasi to-do list menggunakan React. Antara front-end dan backend terpisah, de
 - pnpm run preview: Menjalankan build produksi secara lokal.
 - pnpm run lint: Melakukan linting pada kode menggunakan ESLint (jika dikonfigurasi).
 - pnpm run test: Menjalankan tes (jika pengujian dikonfigurasi).
-  TBD
