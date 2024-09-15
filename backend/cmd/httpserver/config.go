@@ -5,7 +5,6 @@ import (
 
 	"github.com/caarlos0/env"
 	log "github.com/sirupsen/logrus"
-	"github.com/tamzidan/todolist/internal/interfaces/http"
 )
 
 type Config struct {
@@ -19,23 +18,9 @@ type Config struct {
 	WriteTimeout time.Duration `env:"HTTP_WRITE_TIMEOUT,required"`
 	IdleTimeout  time.Duration `env:"HTTP_IDLE_TIMEOUT,required"`
 
+	DBMigrationFolder string `env:"DB_MIGRATION_FOLDER,required"`
+
 	SQLite3DBPathName string `env:"SQLITE3_DB_PATHNAME,required"`
-}
-
-func (c *Config) GetHTTPConfig() http.Config {
-	return http.Config{
-		Host:         c.Host,
-		Port:         c.Port,
-		ReadTimeout:  c.ReadTimeout,
-		WriteTimeout: c.WriteTimeout,
-		IdleTimeout:  c.IdleTimeout,
-	}
-}
-
-func (c *Config) GetSQLite3Config() http.SQLite3Config {
-	return http.SQLite3Config{
-		DBPathName: c.SQLite3DBPathName,
-	}
 }
 
 func mustLoadConfig() Config {

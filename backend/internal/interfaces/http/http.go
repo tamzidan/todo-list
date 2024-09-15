@@ -13,7 +13,8 @@ import (
 )
 
 type SQLite3Config struct {
-	DBPathName string
+	DBPathName      string
+	MigrationFolder string
 }
 
 type Config struct {
