@@ -28,8 +28,8 @@ func (s *SQLite3Storage) Close() error {
 
 func (s *SQLite3Storage) GetTask(ctx context.Context, id int64) (Task, error) {
 	var t Task
-	err := s.db.QueryRow("SELECT id, name, description, is_checked, created_at, updated_at, deleted_at FROM tasks WHERE id = ?", id).
-		Scan(&t.Id, &t.Name, &t.Description, &t.IsChecked, &t.CreatedAt, &t.UpdatedAt, t.DeletedAt)
+	err := s.db.QueryRow("SELECT id, name, description, checked_at, created_at, updated_at, deleted_at FROM tasks WHERE id = ?", id).
+		Scan(&t.Id, &t.Name, &t.Description, &t.CheckedAt, &t.CreatedAt, &t.UpdatedAt, &t.DeletedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return Task{}, ErrNotFound
@@ -43,7 +43,7 @@ func (s *SQLite3Storage) GetTask(ctx context.Context, id int64) (Task, error) {
 
 func (s *SQLite3Storage) GetListTask(ctx context.Context, page, limit int) ([]Task, error) {
 	offset := (page * limit) - limit
-	rows, err := s.db.Query("SELECT id, name, description, is_checked, created_at, updated_at, deleted_at FROM tasks ORDER BY created_at DESC LIMIT ? OFFSET ?", limit, offset)
+	rows, err := s.db.Query("SELECT id, name, description, checked_at, created_at, updated_at, deleted_at FROM tasks ORDER BY created_at DESC LIMIT ? OFFSET ?", limit, offset)
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to execute query")
 	}
@@ -52,7 +52,7 @@ func (s *SQLite3Storage) GetListTask(ctx context.Context, page, limit int) ([]Ta
 	tasks := make([]Task, 0)
 	for rows.Next() {
 		var t Task
-		err := rows.Scan(&t.Id, t.Name, t.Description, t.IsChecked, t.CreatedAt, t.UpdatedAt, t.DeletedAt)
+		err := rows.Scan(&t.Id, &t.Name, &t.Description, &t.CheckedAt, &t.CreatedAt, &t.UpdatedAt, &t.DeletedAt)
 		if err != nil {
 			log.WithError(err).Error("unable to scan rows")
 			continue
@@ -68,13 +68,13 @@ func (s *SQLite3Storage) GetListTask(ctx context.Context, page, limit int) ([]Ta
 }
 
 func (s *SQLite3Storage) InsertTask(ctx context.Context, t Task) (Task, error) {
-	stmt, err := s.db.Prepare("INSERT INTO tasks(name, description, is_checked, created_at, updated_at, deleted_at) VALUES(?, ?, ?, ?, ?, ?)")
+	stmt, err := s.db.Prepare("INSERT INTO tasks(name, description, checked_at, created_at, updated_at, deleted_at) VALUES(?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return Task{}, errors.Wrap(err, "unable to prepare sql statement")
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(t.Name, t.Description, t.IsChecked, t.CreatedAt, t.UpdatedAt, t.DeletedAt)
+	_, err = stmt.Exec(t.Name, t.Description, t.CheckedAt, t.CreatedAt, t.UpdatedAt, t.DeletedAt)
 	if err != nil {
 		return Task{}, errors.Wrap(err, "unble to execute insert query")
 	}
@@ -83,7 +83,7 @@ func (s *SQLite3Storage) InsertTask(ctx context.Context, t Task) (Task, error) {
 }
 
 func (s *SQLite3Storage) UppdateTask(ctx context.Context, id int64, t Task) (Task, error) {
-	_, err := s.db.Exec("UPDATE tasks SET name = ?, description = ?, is_checked = ?, created_at = ?, updated_at = ? WHERE id = ?", t.Name, t.Description, t.IsChecked, t.CreatedAt, t.UpdatedAt, id)
+	_, err := s.db.Exec("UPDATE tasks SET name = ?, description = ?, checked_at = ?, created_at = ?, updated_at = ? WHERE id = ?", t.Name, t.Description, t.CheckedAt, t.CreatedAt, t.UpdatedAt, id)
 	if err != nil {
 		return Task{}, errors.Wrap(err, "unable to execte update query")
 	}

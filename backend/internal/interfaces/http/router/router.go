@@ -17,6 +17,10 @@ func Setup(h *handler.Task) *gin.Engine {
 	})
 
 	r.GET("/tasks", h.GetListTask)
+	r.GET("/tasks/:id", h.GetATask)
+	r.POST("/tasks", h.CreateTask)
+	r.PUT("/tasks/:id", h.UpdateTask)
+	r.DELETE("/tasks/:id", h.DeleteTask)
 
 	return r
 }

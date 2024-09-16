@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -84,7 +85,7 @@ func mustMigrate(dbFile, migrationFolder string) {
 		log.Fatalf("unable to initialize database instance: %s", err)
 	}
 
-	if err = m.Up(); err != nil {
+	if err = m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		if errDown := m.Down(); errDown != nil {
 			log.Fatalf("unable to migrate down: %s", errDown)
 		}

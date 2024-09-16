@@ -6,15 +6,13 @@ import (
 	"time"
 )
 
-var (
-	ErrNotFound = errors.New("not found")
-)
+var ErrNotFound = errors.New("not found")
 
 type Task struct {
 	Id          int64
 	Name        string
 	Description string
-	IsChecked   bool
+	CheckedAt   *time.Time
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time
