@@ -1,0 +1,14 @@
+services:
+  frontend:
+    image: example/webapp
+    ports:
+      - "8000:8080"
+
+  backend:
+    build:
+      dockerfile: Dockerfile
+      tags:
+        - "todo-backend:latest"
+    image: todo-backend:latest
+    ports:
+      - "8001:8080"
